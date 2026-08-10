@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>بصائر — قيّم تدبرك</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B2E28;
+    --ink-soft:#3C4A44;
+    --paper:#FAF5E8;
+    --paper-2:#F1E7CE;
+    --paper-3:#E9DBB9;
+    --gold:#AE7C2E;
+    --gold-deep:#8C6222;
+    --gold-light:#E7D6AC;
+    --teal:#0F5C4E;
+    --teal-bg:#E4EFEA;
+    --blue:#2C5F7C;
+    --blue-bg:#E4ECF1;
+    --plum:#6B3F63;
+    --plum-bg:#EFE5EC;
+    --muted:#8A8172;
+    --danger:#9C3B3B;
+    --shadow: 0 18px 40px -18px rgba(27,46,40,0.35);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(circle at 12% 8%, rgba(174,124,46,0.10), transparent 40%),
+      radial-gradient(circle at 88% 92%, rgba(15,92,78,0.08), transparent 45%),
+      repeating-linear-gradient(0deg, rgba(174,124,46,0.025) 0px, rgba(174,124,46,0.025) 1px, transparent 1px, transparent 3px),
+      var(--paper);
+    font-family:'Tajawal', 'Segoe UI', Tahoma, sans-serif;
+    color:var(--ink);
+    display:flex;
+    justify-content:center;
+    padding:28px 14px 60px;
+  }
+  .display{font-family:'Amiri', 'Tajawal', serif;}
+
+  .wrap{ width:100%; max-width:560px; }
+
+  .brandrow{
+    display:flex; align-items:baseline; justify-content:center; gap:10px;
+    margin-bottom:22px;
+  }
+  .brandrow .logo{
+    font-family:'Amiri', serif; font-weight:700; font-size:28px; color:var(--gold-deep);
+    letter-spacing:1px;
+  }
+  .brandrow .tagline{ font-size:13px; color:var(--muted); }
+
+  .beads{
+    display:flex; align-items:center; justify-content:center; gap:0; margin-bottom:26px;
+    user-select:none;
+  }
+  .bead{
+    width:14px; height:14px; border-radius:50%;
+    background:var(--paper-2); border:1.5px solid var(--paper-3);
+    transition: all .35s ease;
+  }
+  .bead.done{ background:var(--gold); border-color:var(--gold); box-shadow:0 0 0 4px rgba(174,124,46,0.15); }
+  .bead.current{ background:var(--gold); border-color:var(--gold); transform:scale(1.35); box-shadow:0 0 0 5px rgba(174,124,46,0.18); }
+  .thread{ width:34px; height:1.5px; background:var(--paper-3); }
+  .thread.done{ background:var(--gold-light); }
+
+  .card{
+    position:relative;
+    background:#fffdf8;
+    border:1px solid var(--paper-3);
+    border-radius:18px;
+    padding:30px 24px 26px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+  }
+  .corner{ position:absolute; width:46px; height:46px; opacity:.55; pointer-events:none; }
+  .corner-tr{ top:8px; left:8px; transform:scaleX(-1); }
+  .corner-bl{ bottom:8px; right:8px; transform:rotate(180deg) scaleX(-1); }
+
+  h1.step-title{
+    font-family:'Amiri', serif;
+    font-size:24px; font-weight:700; margin:0 0 4px; color:var(--ink);
+    text-align:center;
+  }
+  p.step-sub{
+    text-align:center; color:var(--muted); font-size:14px; margin:0 0 24px;
+  }
+
+  .back-btn{
+    display:inline-flex; align-items:center; gap:6px;
+    background:none; border:none; color:var(--muted); font-family:inherit;
+    font-size:13px; cursor:pointer; padding:4px 2px; margin-bottom:10px;
+  }
+  .back-btn:hover{ color:var(--ink); }
+
+  .option-list{ display:flex; flex-direction:column; gap:12px; }
+  .opt-card{
+    text-align:right; cursor:pointer; border:1.5px solid var(--paper-3);
+    background:var(--paper); border-radius:14px; padding:16px 18px;
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+    font-family:inherit;
+  }
+  .opt-card:hover{ transform:translateY(-2px); box-shadow:0 10px 22px -14px rgba(27,46,40,.4); }
+  .opt-card:active{ transform:translateY(0); }
+  .opt-card .opt-text .opt-title{ font-weight:700; font-size:17px; margin-bottom:3px; }
+  .opt-card .opt-text .opt-sub{ font-size:12.5px; color:var(--muted); }
+  .opt-card .opt-chevron{ font-size:18px; opacity:.45; flex-shrink:0; }
+
+  .opt-card.lvl-1{ border-color:#c9dfd2; }
+  .opt-card.lvl-1 .opt-title{ color:var(--teal); }
+  .opt-card.lvl-2{ border-color:#c7d8e2; }
+  .opt-card.lvl-2 .opt-title{ color:var(--blue); }
+  .opt-card.lvl-3{ border-color:#dcc9d6; }
+  .opt-card.lvl-3 .opt-title{ color:var(--plum); }
+  .opt-card.ayah .opt-title{ color:var(--gold-deep); }
+
+  .badge{
+    display:inline-block; font-size:11px; padding:3px 10px; border-radius:999px;
+    font-weight:700; margin-bottom:10px;
+  }
+  .badge.lvl-1{ background:var(--teal-bg); color:var(--teal); }
+  .badge.lvl-2{ background:var(--blue-bg); color:var(--blue); }
+  .badge.lvl-3{ background:var(--plum-bg); color:var(--plum); }
+
+  .read-ref{ text-align:center; color:var(--gold-deep); font-weight:700; font-size:14px; margin-bottom:2px; }
+  .read-title{ text-align:center; font-family:'Amiri',serif; font-size:26px; font-weight:700; margin:2px 0 14px; }
+  .badge-row{ display:flex; justify-content:center; margin-bottom:16px; }
+
+  .points{ display:flex; flex-direction:column; gap:12px; margin-bottom:26px; }
+  .point{
+    display:flex; gap:10px; align-items:flex-start;
+    background:var(--paper); border-radius:12px; padding:13px 15px;
+    border-right:3px solid var(--gold);
+    font-size:14.5px; line-height:1.9;
+  }
+  .point b{ color:var(--gold-deep); }
+
+  .divider{ border:none; border-top:1px dashed var(--paper-3); margin:22px 0; }
+
+  .rate-label{ text-align:center; font-weight:700; font-size:15px; margin-bottom:4px; }
+  .rate-sub{ text-align:center; color:var(--muted); font-size:12.5px; margin-bottom:14px; }
+  .rate-row{ display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:14px; direction:ltr; }
+  .rate-end{ font-size:11px; color:var(--muted); font-weight:700; white-space:nowrap; width:44px; flex-shrink:0; }
+  .rate-end.weak{ text-align:right; }
+  .rate-end.strong{ text-align:left; }
+  .crescents{ display:flex; justify-content:center; gap:10px; direction:ltr; }
+  .crescent-btn{
+    background:none; border:none; cursor:pointer; padding:5px;
+    border-radius:50%; line-height:0; transition: transform .12s ease, background .15s ease, box-shadow .15s ease;
+  }
+  .crescent-btn svg{ width:34px; height:34px; transition: transform .12s ease; }
+  .crescent-btn:hover svg{ transform:scale(1.12); }
+  .crescent-btn.selected{
+    transform:scale(1.3);
+  }
+  .crescent-btn.selected svg{
+    filter: drop-shadow(0 0 7px rgba(174,124,46,0.75));
+  }
+  .rate-caption{
+    text-align:center; font-size:15px; color:var(--gold-deep); font-weight:800;
+    min-height:20px; margin:0 0 18px; transition:opacity .15s ease;
+  }
+
+  textarea{
+    width:100%; min-height:88px; resize:vertical;
+    border:1.5px solid var(--paper-3); border-radius:12px; padding:12px 14px;
+    font-family:inherit; font-size:14px; background:var(--paper);
+    color:var(--ink);
+  }
+  textarea:focus{ outline:none; border-color:var(--gold); }
+  label.note-label{ display:block; font-size:13px; font-weight:700; margin:18px 0 8px; color:var(--ink-soft); }
+
+  .submit-btn{
+    width:100%; margin-top:22px; padding:14px; border:none; border-radius:12px;
+    background:var(--gold-deep); color:#fff; font-family:inherit; font-weight:700; font-size:15.5px;
+    cursor:pointer; transition: background .15s ease, opacity .15s ease;
+  }
+  .submit-btn:hover{ background:#754e1a; }
+  .submit-btn:disabled{ opacity:.45; cursor:not-allowed; }
+  .err-text{ text-align:center; color:var(--danger); font-size:13px; margin-top:10px; }
+
+  .thanks{ text-align:center; padding:20px 0 4px; }
+  .thanks .moon{ font-size:44px; margin-bottom:10px; }
+  .thanks h1{ font-family:'Amiri',serif; font-size:24px; margin:0 0 8px; }
+  .thanks p{ color:var(--muted); font-size:14px; margin:0 0 26px; line-height:1.8; }
+  .again-btn{
+    padding:12px 24px; border-radius:12px; border:1.5px solid var(--gold);
+    background:none; color:var(--gold-deep); font-family:inherit; font-weight:700;
+    cursor:pointer; font-size:14px;
+  }
+  .again-btn:hover{ background:var(--gold-light); }
+
+  .admin-link{
+    display:block; text-align:center; margin-top:22px; font-size:11.5px;
+    color:var(--muted); text-decoration:none; opacity:.6; cursor:pointer; background:none; border:none;
+    width:100%; font-family:inherit;
+  }
+  .admin-link:hover{ opacity:1; }
+
+  .overlay{
+    position:fixed; inset:0; background:rgba(27,46,40,0.55);
+    display:flex; align-items:center; justify-content:center; padding:16px; z-index:50;
+  }
+  .modal{
+    background:#fffdf8; border-radius:16px; padding:24px; max-width:440px; width:100%;
+    max-height:86vh; overflow-y:auto; box-shadow:var(--shadow);
+  }
+  .modal h2{ font-family:'Amiri',serif; font-size:20px; margin:0 0 4px; text-align:center; }
+  .modal .modal-sub{ text-align:center; color:var(--muted); font-size:12.5px; margin-bottom:18px; }
+  .pass-row{ display:flex; gap:8px; }
+  .pass-row input{
+    flex:1; border:1.5px solid var(--paper-3); border-radius:10px; padding:10px 12px;
+    font-family:inherit; font-size:16px; text-align:center; letter-spacing:3px;
+  }
+  .pass-row input:focus{ outline:none; border-color:var(--gold); }
+  .pass-row button{
+    padding:10px 16px; border:none; border-radius:10px; background:var(--gold-deep);
+    color:#fff; font-family:inherit; font-weight:700; cursor:pointer;
+  }
+  .close-x{
+    position:absolute; top:14px; left:14px; background:none; border:none; font-size:18px;
+    color:var(--muted); cursor:pointer;
+  }
+  .modal{ position:relative; }
+
+  .stat-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:18px; }
+  .stat-box{ background:var(--paper); border-radius:12px; padding:12px; text-align:center; }
+  .stat-box .num{ font-size:22px; font-weight:800; color:var(--gold-deep); }
+  .stat-box .lab{ font-size:11.5px; color:var(--muted); margin-top:2px; }
+
+  .breakdown{ margin-bottom:16px; }
+  .breakdown h3{ font-size:13px; margin:0 0 8px; color:var(--ink-soft); }
+  .bd-row{ display:flex; align-items:center; gap:8px; font-size:12.5px; margin-bottom:6px; }
+  .bd-row .bd-label{ width:110px; flex-shrink:0; color:var(--ink-soft); }
+  .bd-bar{ flex:1; height:8px; background:var(--paper-2); border-radius:6px; overflow:hidden; }
+  .bd-bar .fill{ height:100%; background:var(--gold); border-radius:6px; }
+  .bd-row .bd-val{ width:40px; text-align:left; direction:ltr; color:var(--muted); flex-shrink:0; }
+
+  .entries{ display:flex; flex-direction:column; gap:10px; }
+  .entry{ background:var(--paper); border-radius:10px; padding:10px 12px; font-size:12.5px; }
+  .entry .entry-top{ display:flex; justify-content:space-between; margin-bottom:4px; color:var(--gold-deep); font-weight:700; }
+  .entry .entry-note{ color:var(--ink-soft); line-height:1.7; }
+  .entry .entry-date{ color:var(--muted); font-size:11px; margin-top:3px; }
+  .empty-note{ text-align:center; color:var(--muted); font-size:12.5px; padding:12px 0; }
+  .refresh-btn{
+    width:100%; margin-top:14px; padding:9px; border-radius:10px; border:1px solid var(--paper-3);
+    background:none; color:var(--ink-soft); font-family:inherit; font-size:12.5px; cursor:pointer;
+  }
+  .loading{ text-align:center; color:var(--muted); font-size:13px; padding:20px 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brandrow">
+    <span class="logo">بصائر</span>
+    <span class="tagline">تدبّر</span>
+  </div>
+  <div class="beads" id="beads"></div>
+  <div class="card" id="card">
+    <svg class="corner corner-tr" viewBox="0 0 100 100"><path d="M2,2 L2,40 M2,2 L40,2" stroke="var(--gold)" stroke-width="2" fill="none"/><circle cx="2" cy="2" r="4" fill="var(--gold)"/></svg>
+    <svg class="corner corner-bl" viewBox="0 0 100 100"><path d="M2,2 L2,40 M2,2 L40,2" stroke="var(--gold)" stroke-width="2" fill="none"/><circle cx="2" cy="2" r="4" fill="var(--gold)"/></svg>
+    <div id="content"></div>
+  </div>
+  <button class="admin-link" id="adminLink">لوحة المتابعة (للمشرف)</button>
+</div>
+
+<script>
+// ---------------- CONTENT ----------------
+const CONTENT = {
+  kursi: {
+    title: "آية الكرسي", ref: "سورة البقرة — الآية ٢٥٥",
+    levels: {
+      1: { subtitle: "بناء اليقين", points: [
+        ["قاعدة الوجود", "لم تأخذ هذه الآية منزلتها كأعظم آية في القرآن من فراغ، بل لأنها ترسم صورة مكتملة عن الخالق، معلنةً أنه لا ملجأ ولا معبود بحق إلا هو."],
+        ["المنبع الذي لا ينضب", "الله هو \"الحيّ\" و\"القيّوم\"؛ فالكون لا يسير بقوانين مادية عمياء، بل بتدبير خالق مستغنٍ عن خلقه، وكل الخلق مفتقرون إليه في كل ثانية."],
+        ["العناية التي لا تنام", "من كمال رحمته أنه مُنزه عن النعاس والنوم، وهذا يزرع في قلب المؤمن طمأنينة مطلقة بأن عينه التي لا تنام تحرسه وترعاه في كل لحظة."],
+        ["الملكوت المطلق", "كل ذرة في السماوات والأرض هي ملك خالص له يتصرف فيها بحكمته، ولا يخرج شيء عن سلطانه."],
+      ]},
+      2: { subtitle: "تصحيح المفاهيم وتزكية النفس", points: [
+        ["الشفاعة والتوحيد", "قوله {مَن ذَا ٱلَّذِى يَشْفَعُ عِندَهُۥٓ إِلَّا بِإِذْنِهِۦ} يقطع أي تعلق للمؤمن بغير الله. فالشفاعة لا تملكها الواسطة، بل يملكها الخالق الذي يأذن بها؛ مما يحول قلب المؤمن من التذلل للمخلوقين إلى التذلل لربهم."],
+        ["التواضع المعرفي", "يُقرر القرآن محدودية العقل البشري بكلمات حاسمة: {وَلَا يُحِيطُونَ بِشَىْءٍ مِّنْ عِلْمِهِۦٓ إِلَّا بِمَا شَآءَ}. فكل علم نصل إليه هو قطرة أذن الله لنا أن نغترفها من بحر علمه، مما يورث الإنسان تواضعاً علمياً وفكرياً."],
+        ["الراحة النفسية (لا يؤوده حفظهما)", "الإمساك بهذا الكون الهائل لا يثقله ولا يجهده سبحانه. وهذا يورث كمال التوكل؛ فمن لم يُعجزه حفظ السماوات والأرض، هل يُعجزه تدبير رزقك وإصلاح حالك؟"],
+      ]},
+      3: { subtitle: "الغوص في الأسرار واللطائف", points: [
+        ["التكامل العقائدي", "جمعت هذه الآية أصول التوحيد الثلاثة: الألوهية (لا إله إلا هو)، والربوبية (القيوم)، والأسماء والصفات (العلي العظيم)، وزاوجت بين نفي النقائص وإثبات الكمال المطلق في نسق معجز."],
+        ["سر التقديم في (سِنَةٌ وَلَا نَوْمٌ)", "\"السِّنَة\" هي النعاس الذي يسبق النوم. قدم القرآن نفي الأضعف (السنة) ليكون نفياً لأدنى درجات الغفلة. هذا الترتيب هو رد قاطع على الفلسفات التي تدعي أن الإله استراح أو انعزل عن كونه."],
+        ["هندسة الزمان", "{يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ} إحاطة زمنية تذيب الفوارق بين الماضي والمستقبل في علم الله. هذا يورث المراقبة العميقة؛ فالمؤمن يعيش مكشوفاً أمام علم ربه."],
+        ["سيكولوجية العلو المطلق", "خُتمت الآية بـ {وَهُوَ ٱلْعَلِىُّ ٱلْعَظِيمُ}. هذا الختام يصنع مناعة نفسية صلبة ضد الطغاة؛ فكل جبار يتضاءل ليصبح ذرة هباء أمام علو الله، مما يحرر الإنسان من الخوف من أي مخلوق."],
+      ]},
+    }
+  },
+  azm: {
+    title: "آية العزم", ref: "سورة آل عمران — الآية ١٨٥",
+    levels: {
+      1: { subtitle: "حقيقة الوجود", points: [
+        ["القانون الكوني الصارم", "{كُلُّ نَفْسٍ ذَآئِقَةُ ٱلْمَوْتِ}؛ لا استثناء لأحد. الموت هو الحقيقة الوحيدة التي يتفق عليها البشر، وهو محطة انتقال وليس نهاية المطاف."],
+        ["تأجيل العدالة المطلقة", "الدنيا ليست دار عدل كامل، والمكافآت الحقيقية والأجور التامة تُدخر ليوم القيامة {وَإِنَّمَا تُوَفَّوْنَ أُجُورَكُمْ يَوْمَ ٱلْقِيَـٰمَةِ}."],
+        ["معيار النجاح الحقيقي", "الفوز ليس بتكديس الأموال أو المناصب، بل الفوز الذي لا خسارة بعده محصور في النجاة من النار ودخول الجنة."],
+      ]},
+      2: { subtitle: "العزاء والتوازن النفسي", points: [
+        ["فلسفة التوفية (توفون أجوركم)", "هذه الكلمة تواسي كل مظلوم أو عامل للخير لم يلقَ تقديراً. إنك لم تفقد أجر عملك، بل هو مدخر لك لتستوفيه كاملاً بلا أدنى نقص يوم الحساب."],
+        ["مشهد الإبعاد (فَمَن زُحْزِحَ)", "الفعل \"زُحزح\" يوحي بثقل الجذب، وكأن الإنسان على حافة الهاوية تشده الشهوات والذنوب نحو النار، ولولا رحمة الله وتدخله لإبعاده بقوة في اللحظة الحاسمة، لما نجا."],
+        ["انكشاف الخدعة", "شُبهت الدنيا بـ {مَتَـٰعُ ٱلْغُرُورِ}، والمتاع هو زاد المسافر المؤقت. وُصفت بالغرور لأنها تمارس الخداع البصري؛ فتبدو باقية وهي في الحقيقة تتبخر كالسراب وتترك من اغتر بها في حسرة."],
+      ]},
+      3: { subtitle: "التشريح النفسي والبياني", points: [
+        ["لماذا (ذائقة) الموت؟", "لم يقل القرآن (كل نفس ستموت)، بل استخدم الاستعارة (ذائقة). هذا التعبير يُعطي للموت بعداً شعورياً عميقاً؛ فالموت تجربة فردية مريرة تتجرعها كل نفس بمفردها، مما يكسر كبرياء الإنسان ويوقظه من غفلته."],
+        ["التحرر من ضغوط المادة", "نزلت الآية بعد خسائر غزوة أُحد لتكون دواءً نفسياً يحرر المؤمن من تقييم الأمور بنتائجها الدنيوية القريبة. الهزيمة أو فقد الأحبة ليس هو المقياس، بل المقياس الحقيقي هو المآل الأخروي."],
+        ["حصر الفوز المطلق", "استخدام أداة التحقيق (فقد فاز) بصيغة الماضي يؤكد ثبوت هذا الفوز الذي لا تراجع فيه. وما سواه من نجاحات دنيوية هي مجرد انتصارات مؤقتة لا قيمة لها إن كانت عاقبتها خسران الآخرة."],
+      ]},
+    }
+  },
+  ikhlas: {
+    title: "سورة الإخلاص", ref: "السورة كاملة — الآيات ١-٤",
+    levels: {
+      1: { subtitle: "مفتاح النجاة", points: [
+        ["الإعلان الصارخ للوحدانية", "هذه الآية هي الركيزة الكبرى لدين الإسلام، معلنةً بوضوح أن الله متفرد، لا شريك له في ملكه ولا في عبادته."],
+        ["السيد الذي يُقصد وحده (الصمد)", "الله هو الملجأ الوحيد الذي تقصده الخلائق في كل حاجاتها. فإذا أصابك كرب، فليس لك إلا \"الصمد\" لترفع إليه شكواك موقناً بإجابته."],
+        ["فضلها العظيم (تعدل ثلث القرآن)", "لقصرها وعظمة ما تحتويه من معاني التوحيد، أخبرنا النبي ﷺ أنها تعدل ثلث القرآن؛ مما يدل على أن معرفة الله وتنزيهه هي غاية الغايات."],
+      ]},
+      2: { subtitle: "بناء اليقين وتطهير العقيدة", points: [
+        ["الفرق بين \"الأحد\" و\"الواحد\"", "(الواحد) قد يقبل التجزئة أو التقسيم، أما (الأحد) فهو المتفرد كمالاً وذاتاً من جميع الوجوه؛ ليس له نظير ولا شبيه ولا يُشاركه أحد في كينونته."],
+        ["كمال الغنى (لم يلد ولم يولد)", "الولد في عالم البشر يُطلب للحاجة، أو امتداد النسل، أو التخلص من الوحدة. والله يتنزه عن هذه النقائص؛ فهو كامل الغنى، باقٍ لا يفنى، منزه عن الحاجة لأي امتداد مادي."],
+        ["صباح التوحيد في القلب", "هذه السورة هي خط الدفاع الأول ضد أي خرافة أو شبهة. قراءتها بوعي كفيلة بمسح كل تشويش في العقل عن ذات الإله، وإعادة ضبط بوصلة القلب نحو الاعتماد المطلق على الخالق."],
+      ]},
+      3: { subtitle: "الفلسفة العقدية واستقلال الروح", points: [
+        ["الضرورة الفلسفية لـ \"الصمدية\"", "منطقياً، لا يمكن للكون بكل تعقيده أن يستقر إلا بوجود \"صمد\" واحد، غني عن كل شيء وكل شيء يفتقر إليه. لو كان هناك شركاء لفسد نظام الوجود وتضاربت الإرادات."],
+        ["تجريد الإخلاص", "صُدرت السورة بالأمر (قُلْ)، لتأكيد أن المعرفة الحقيقية بالذات الإلهية هي \"وحي سماوي\" وليست نتاج فلسفات بشرية قابلة للخطأ. وأتت كلمة (أحَدٌ) نكرة لتفيد الشمول وتقطع جذور أي شرك خفي في القلب كالرياء أو التعلق بالأسباب الدنيوية."],
+        ["سيكولوجية الاستغناء", "من يتشرب المعنى العميق لـ (الله الصمد)، يتحرر بالكامل من التذلل للبشر. أنت لست بحاجة للخوف من انقطاع رزقك على يد إنسان، لأن لك ركناً شديداً تستغني به عن كل أحد في الكون، وهذا يولد عزة نفس لا تُكسر."],
+      ]},
+    }
+  }
+};
+
+const LEVELS = {
+  1: { label:"المستوى التمهيدي", sub:"المعنى المباشر والدروس الأساسية", cls:"lvl-1" },
+  2: { label:"المستوى المتوسط", sub:"تفصيل أعمق في الدلالات", cls:"lvl-2" },
+  3: { label:"المستوى العميق", sub:"لطائف وأسرار بلاغية ومعرفية", cls:"lvl-3" },
+};
+
+const ADMIN_CODE = "2255";
+
+// ---------------- STATE ----------------
+let state = { step:"level", level:null, ayah:null, rating:0, note:"", submitting:false, error:"" };
+
+function setState(patch){ state = { ...state, ...patch }; render(); }
+
+// ---------------- ICONS ----------------
+function crescentSvg(filled){
+  return `<svg viewBox="0 0 24 24"><path d="M14.5 3.5C9.5 3.5 5.5 7.5 5.5 12.5S9.5 21.5 14.5 21.5c2 0 3.8-.66 5.3-1.77-1.2.5-2.5.77-3.9.77-5 0-9-3.9-9-8.5s4-8.5 9-8.5c1.4 0 2.7.27 3.9.77C18.3 4.16 16.5 3.5 14.5 3.5z"
+    fill="${filled ? 'var(--gold)' : 'none'}" stroke="var(--gold)" stroke-width="1.3" stroke-linejoin="round"/></svg>`;
+}
+
+// ---------------- BEADS ----------------
+function renderBeads(){
+  const order = ["level","ayah","read","thanks"];
+  const idx = order.indexOf(state.step);
+  const beadsEl = document.getElementById("beads");
+  if (state.step === "thanks"){ beadsEl.innerHTML = ""; return; }
+  let html = "";
+  for (let i=0;i<3;i++){
+    const done = i < idx;
+    const current = i === idx;
+    html += `<div class="bead ${done?'done':''} ${current?'current':''}"></div>`;
+    if (i<2) html += `<div class="thread ${i<idx?'done':''}"></div>`;
+  }
+  beadsEl.innerHTML = html;
+}
+
+// ---------------- GOOGLE SHEETS STORAGE ----------------
+const GOOGLE_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbw8Pd_poGh780UTbvt0q83RgZlm04Gv1mnWEKhSqq9WrP4Jd08BMYSI5pqTjO6NF4BRGQ/exec";
+
+async function saveResponse(){
+  const payload = {
+    level: state.level,
+    ayah: state.ayah,
+    rating: state.rating,
+    note: state.note.trim(),
+    ts: Date.now()
+  };
+
+  try{
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    // With no-cors the browser cannot read the response,
+    // but a successful fetch means the request was sent.
+    return true;
+
+  }catch(e){
+    console.error("Google Sheets save failed", e);
+    return false;
+  }
+}
+
+// Google Sheets is the central database.
+// The old window.storage dashboard cannot be used anymore.
+// Keep this function as a placeholder so the existing dashboard
+// does not break; dashboard results should be viewed in Google Sheets.
+async function loadAllResponses(){
+  return [];
+}
+
+// ---------------- RENDER STEPS ----------------
+function render(){
+  renderBeads();
+  const el = document.getElementById("content");
+  if (state.step === "level") el.innerHTML = renderLevelStep();
+  else if (state.step === "ayah") el.innerHTML = renderAyahStep();
+  else if (state.step === "read") el.innerHTML = renderReadStep();
+  else if (state.step === "thanks") el.innerHTML = renderThanksStep();
+  attachHandlers();
+}
+
+function renderLevelStep(){
+  return `
+    <h1 class="step-title">اختر مستوى تدبرك</h1>
+    <p class="step-sub">كل مستوى يأخذك في عمق مختلف من التأمل</p>
+    <div class="option-list">
+      ${[1,2,3].map(l => `
+        <button class="opt-card ${LEVELS[l].cls}" data-level="${l}">
+          <span class="opt-text">
+            <span class="opt-title">${LEVELS[l].label}</span>
+            <span class="opt-sub">${LEVELS[l].sub}</span>
+          </span>
+          <span class="opt-chevron">‹</span>
+        </button>`).join("")}
+    </div>
+  `;
+}
+
+function renderAyahStep(){
+  return `
+    <button class="back-btn" id="backBtn">‹ رجوع</button>
+    <h1 class="step-title">اختر الآية التي قرأتها</h1>
+    <p class="step-sub">${LEVELS[state.level].label}</p>
+    <div class="option-list">
+      ${Object.entries(CONTENT).map(([key,c]) => `
+        <button class="opt-card ayah" data-ayah="${key}">
+          <span class="opt-text">
+            <span class="opt-title">${c.title}</span>
+            <span class="opt-sub">${c.ref}</span>
+          </span>
+          <span class="opt-chevron">‹</span>
+        </button>`).join("")}
+    </div>
+  `;
+}
+
+function renderReadStep(){
+  const c = CONTENT[state.ayah];
+  const lvl = LEVELS[state.level];
+  const points = c.levels[state.level].points;
+  const captions = ["", "ضعيف", "مقبول", "جيد", "جيد جدًا", "ممتاز"];
+  return `
+    <button class="back-btn" id="backBtn">‹ رجوع</button>
+    <div class="badge-row"><span class="badge ${lvl.cls}">${lvl.label}</span></div>
+    <div class="read-ref">${c.ref}</div>
+    <div class="read-title">${c.title}</div>
+    <div class="points">
+      ${points.map(([t,b]) => `<div class="point">◆ <span><b>${t}:</b> ${b}</span></div>`).join("")}
+    </div>
+    <hr class="divider">
+    <div class="rate-label">كيف كان مستوى الفوائد؟</div>
+    <div class="rate-sub">قيّم من ١ (ضعيف) إلى ٥ (ممتاز)</div>
+    <div class="rate-row">
+      <span class="rate-end weak">ضعيف ١</span>
+      <div class="crescents">
+        ${[1,2,3,4,5].map(n => `<button class="crescent-btn ${n===state.rating ? "selected":""}" data-rate="${n}">${crescentSvg(n<=state.rating)}</button>`).join("")}
+      </div>
+      <span class="rate-end strong">٥ ممتاز</span>
+    </div>
+    <div class="rate-caption">${state.rating ? captions[state.rating] : ""}</div>
+    <label class="note-label" for="noteArea">شارك ملاحظة أو خاطرة (اختياري)</label>
+    <textarea id="noteArea" placeholder="اكتب هنا ما لمس قلبك من هذا التدبر...">${state.note}</textarea>
+    <button class="submit-btn" id="submitBtn" ${state.rating===0 || state.submitting ? "disabled":""}>
+      ${state.submitting ? "جارٍ الإرسال..." : "إرسال التقييم"}
+    </button>
+    ${state.error ? `<div class="err-text">${state.error}</div>` : ""}
+  `;
+}
+
+function renderThanksStep(){
+  return `
+    <div class="thanks">
+      <div class="moon">🌙</div>
+      <h1>جزاك الله خيرًا</h1>
+      <p>تم تسجيل تقييمك وملاحظتك بنجاح.<br>نفعنا الله وإياك بما تدبرناه من كتابه.</p>
+      <button class="again-btn" id="againBtn">تدبّر آية أخرى</button>
+    </div>
+  `;
+}
+
+// ---------------- HANDLERS ----------------
+function attachHandlers(){
+  document.querySelectorAll("[data-level]").forEach(btn=>{
+    btn.addEventListener("click", ()=> setState({ level: Number(btn.dataset.level), step:"ayah" }));
+  });
+  document.querySelectorAll("[data-ayah]").forEach(btn=>{
+    btn.addEventListener("click", ()=> setState({ ayah: btn.dataset.ayah, step:"read", rating:0, note:"", error:"" }));
+  });
+  document.querySelectorAll("[data-rate]").forEach(btn=>{
+    btn.addEventListener("click", ()=> setState({ rating:Number(btn.dataset.rate) }));
+  });
+  const back = document.getElementById("backBtn");
+  if (back) back.addEventListener("click", ()=>{
+    if (state.step==="ayah") setState({ step:"level" });
+    else if (state.step==="read") setState({ step:"ayah" });
+  });
+  const noteArea = document.getElementById("noteArea");
+  if (noteArea) noteArea.addEventListener("input", (e)=>{ state.note = e.target.value; });
+  const submitBtn = document.getElementById("submitBtn");
+  if (submitBtn) submitBtn.addEventListener("click", async ()=>{
+    setState({ submitting:true, error:"" });
+    const ok = await saveResponse();
+    if (ok) setState({ step:"thanks", submitting:false });
+    else setState({ submitting:false, error:"تعذّر إرسال إجابتك، تحقق من الاتصال وحاول مرة أخرى." });
+  });
+  const again = document.getElementById("againBtn");
+  if (again) again.addEventListener("click", ()=> setState({ step:"level", level:null, ayah:null, rating:0, note:"", error:"" }));
+}
+
+// ---------------- ADMIN ----------------
+document.getElementById("adminLink").addEventListener("click", openAdminGate);
+
+function openAdminGate(){
+  const overlay = document.createElement("div");
+  overlay.className = "overlay";
+  overlay.innerHTML = `
+    <div class="modal">
+      <button class="close-x" id="closeGate">✕</button>
+      <h2>لوحة المتابعة</h2>
+      <div class="modal-sub">أدخل رمز الدخول لعرض النتائج</div>
+      <div class="pass-row">
+        <input type="password" inputmode="numeric" id="passInput" maxlength="8" placeholder="••••">
+        <button id="passGo">دخول</button>
+      </div>
+      <div class="err-text" id="passErr" style="display:none; margin-top:10px;">رمز غير صحيح</div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  document.getElementById("closeGate").addEventListener("click", ()=> overlay.remove());
+  overlay.addEventListener("click", (e)=>{ if (e.target===overlay) overlay.remove(); });
+  const input = document.getElementById("passInput");
+  const tryEnter = ()=>{
+    if (input.value === ADMIN_CODE){ overlay.remove(); openDashboard(); }
+    else { document.getElementById("passErr").style.display = "block"; }
+  };
+  document.getElementById("passGo").addEventListener("click", tryEnter);
+  input.addEventListener("keydown", (e)=>{ if (e.key==="Enter") tryEnter(); });
+  input.focus();
+}
+
+async function openDashboard(){
+  const overlay = document.createElement("div");
+  overlay.className = "overlay";
+  overlay.innerHTML = `
+    <div class="modal">
+      <button class="close-x" id="closeDash">✕</button>
+      <h2>نتائج المتابعين</h2>
+      <div class="modal-sub">لرؤية جميع التقييمات، افتح جدول Google Sheets المرتبط بالمشروع.</div>
+      <div id="dashBody"><div class="loading">جارٍ تحميل النتائج...</div></div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  document.getElementById("closeDash").addEventListener("click", ()=> overlay.remove());
+  overlay.addEventListener("click", (e)=>{ if (e.target===overlay) overlay.remove(); });
+  await fillDashboard();
+
+  async function fillDashboard(){
+    const body = document.getElementById("dashBody");
+    body.innerHTML = `<div class="loading">جارٍ تحميل النتائج...</div>`;
+    let data = [];
+    try{ data = await loadAllResponses(); }
+    catch(e){ body.innerHTML = `<div class="err-text">تعذّر تحميل النتائج.</div>`; return; }
+
+    if (data.length === 0){
+      body.innerHTML = `<div class="empty-note">لا توجد إجابات بعد.</div>
+        <button class="refresh-btn" id="refreshDash">تحديث</button>`;
+      document.getElementById("refreshDash").addEventListener("click", fillDashboard);
+      return;
+    }
+
+    const avg = (arr)=> (arr.reduce((s,x)=>s+x.rating,0)/arr.length).toFixed(1);
+    const overallAvg = avg(data);
+
+    const byAyah = {};
+    Object.keys(CONTENT).forEach(k => byAyah[k] = data.filter(d=>d.ayah===k));
+    const byLevel = {1:[],2:[],3:[]};
+    data.forEach(d => { if(byLevel[d.level]) byLevel[d.level].push(d); });
+
+    const notes = data.filter(d => d.note && d.note.length>0);
+
+    body.innerHTML = `
+      <div class="stat-grid">
+        <div class="stat-box"><div class="num">${data.length}</div><div class="lab">إجمالي الإجابات</div></div>
+        <div class="stat-box"><div class="num">${overallAvg}</div><div class="lab">متوسط التقييم</div></div>
+      </div>
+      <div class="breakdown">
+        <h3>حسب الآية</h3>
+        ${Object.entries(byAyah).map(([k,arr])=>`
+          <div class="bd-row">
+            <span class="bd-label">${CONTENT[k].title}</span>
+            <div class="bd-bar"><div class="fill" style="width:${arr.length? (avg(arr)/5*100):0}%"></div></div>
+            <span class="bd-val">${arr.length ? avg(arr)+' ★' : '—'} (${arr.length})</span>
+          </div>`).join("")}
+      </div>
+      <div class="breakdown">
+        <h3>حسب المستوى</h3>
+        ${[1,2,3].map(l=>`
+          <div class="bd-row">
+            <span class="bd-label">${LEVELS[l].label}</span>
+            <div class="bd-bar"><div class="fill" style="width:${byLevel[l].length? (avg(byLevel[l])/5*100):0}%"></div></div>
+            <span class="bd-val">${byLevel[l].length ? avg(byLevel[l])+' ★' : '—'} (${byLevel[l].length})</span>
+          </div>`).join("")}
+      </div>
+      <div class="breakdown">
+        <h3>أحدث الملاحظات (${notes.length})</h3>
+        <div class="entries">
+          ${notes.length ? notes.slice(0,25).map(n=>`
+            <div class="entry">
+              <div class="entry-top"><span>${CONTENT[n.ayah].title} · ${LEVELS[n.level].label}</span><span>${'★'.repeat(n.rating)}</span></div>
+              <div class="entry-note">${escapeHtml(n.note)}</div>
+              <div class="entry-date">${new Date(n.ts).toLocaleString('ar-EG')}</div>
+            </div>`).join("") : '<div class="empty-note">لا توجد ملاحظات نصية بعد.</div>'}
+        </div>
+      </div>
+      <button class="refresh-btn" id="refreshDash">تحديث النتائج</button>
+    `;
+    document.getElementById("refreshDash").addEventListener("click", fillDashboard);
+  }
+}
+
+function escapeHtml(str){
+  const div = document.createElement("div");
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// ---------------- INIT ----------------
+render();
+</script>
+</body>
+</html>
