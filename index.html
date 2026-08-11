@@ -119,6 +119,22 @@
   .opt-card.lvl-3{ border-color:#dcc9d6; }
   .opt-card.lvl-3 .opt-title{ color:var(--plum); }
   .opt-card.ayah .opt-title{ color:var(--gold-deep); }
+  .opt-card.exp .opt-title{ color:var(--gold-deep); }
+
+  .consent-box{
+    background:var(--paper); border:1px solid var(--paper-3); border-radius:14px;
+    padding:16px 18px; font-size:13.5px; line-height:2; color:var(--ink-soft); margin-bottom:18px;
+  }
+  .consent-check-row{
+    display:flex; align-items:flex-start; gap:10px; padding:2px 2px 4px;
+    font-size:13.5px; color:var(--ink); cursor:pointer;
+  }
+  .consent-check-row input{ margin-top:3px; width:17px; height:17px; accent-color:var(--gold-deep); flex-shrink:0; }
+
+  .qgroup{ margin-bottom:24px; }
+  .qgroup:last-child{ margin-bottom:0; }
+  .qgroup .q-label{ text-align:center; font-weight:700; font-size:14px; margin-bottom:10px; }
+  .qgroup .rate-row{ margin-bottom:4px; }
 
   .badge{
     display:inline-block; font-size:11px; padding:3px 10px; border-radius:999px;
@@ -343,10 +359,29 @@ const LEVELS = {
   3: { label:"المستوى العميق", sub:"لطائف وأسرار بلاغية ومعرفية", cls:"lvl-3" },
 };
 
+const EXPERIENCE = [
+  { key:"beginner", label:"مبتدئ" },
+  { key:"some", label:"لدي بعض الخبرة" },
+  { key:"skilled", label:"متمرس" },
+  { key:"expert", label:"متمرس جدًا" },
+];
+
+const RATING_DIMENSIONS = [
+  { key:"clarity", label:"وضوح التدبر" },
+  { key:"relevance", label:"ارتباطه بالآية" },
+  { key:"reflection", label:"مساعدته على التأمل" },
+  { key:"usefulness", label:"فائدته" },
+];
+
 const ADMIN_CODE = "2255";
 
 // ---------------- STATE ----------------
-let state = { step:"level", level:null, ayah:null, rating:0, note:"", submitting:false, error:"" };
+function emptyRatings(){ return { clarity:0, relevance:0, reflection:0, usefulness:0 }; }
+let state = {
+  step:"consent", consented:false,
+  experience:null, level:null, ayah:null,
+  ratings: emptyRatings(), note:"", submitting:false, error:""
+};
 
 function setState(patch){ state = { ...state, ...patch }; render(); }
 
@@ -358,10 +393,10 @@ function crescentSvg(filled){
 
 // ---------------- BEADS ----------------
 function renderBeads(){
-  const order = ["level","ayah","read","thanks"];
+  const order = ["experience","ayah","read"];
   const idx = order.indexOf(state.step);
   const beadsEl = document.getElementById("beads");
-  if (state.step === "thanks"){ beadsEl.innerHTML = ""; return; }
+  if (state.step === "consent" || state.step === "thanks"){ beadsEl.innerHTML = ""; return; }
   let html = "";
   for (let i=0;i<3;i++){
     const done = i < idx;
@@ -378,9 +413,13 @@ const GOOGLE_SCRIPT_URL =
 
 async function saveResponse(){
   const payload = {
+    experience: state.experience,
     level: state.level,
     ayah: state.ayah,
-    rating: state.rating,
+    clarity: state.ratings.clarity,
+    relevance: state.ratings.relevance,
+    reflection: state.ratings.reflection,
+    usefulness: state.ratings.usefulness,
     note: state.note.trim(),
     ts: Date.now()
   };
@@ -417,23 +456,39 @@ async function loadAllResponses(){
 function render(){
   renderBeads();
   const el = document.getElementById("content");
-  if (state.step === "level") el.innerHTML = renderLevelStep();
+  if (state.step === "consent") el.innerHTML = renderConsentStep();
+  else if (state.step === "experience") el.innerHTML = renderExperienceStep();
   else if (state.step === "ayah") el.innerHTML = renderAyahStep();
   else if (state.step === "read") el.innerHTML = renderReadStep();
   else if (state.step === "thanks") el.innerHTML = renderThanksStep();
   attachHandlers();
 }
 
-function renderLevelStep(){
+function renderConsentStep(){
   return `
-    <h1 class="step-title">اختر مستوى تدبرك</h1>
-    <p class="step-sub">كل مستوى يأخذك في عمق مختلف من التأمل</p>
+    <h1 class="step-title">المشاركة في الدراسة</h1>
+    <div class="consent-box">
+      نعمل على تقييم نظام "بصائر" للتدبر في القرآن الكريم.<br><br>
+      مشاركتك اختيارية، وتستغرق حوالي ٢–٣ دقائق. سيتم استخدام إجاباتك لأغراض البحث العلمي، وقد تُعرض النتائج في ورقة بحثية. لن نطلب منك أي معلومات شخصية تعريفية.<br><br>
+      يمكنك التوقف عن المشاركة في أي وقت.
+    </div>
+    <label class="consent-check-row">
+      <input type="checkbox" id="consentCheck" ${state.consented ? "checked":""}>
+      <span>أوافق على المشاركة في الدراسة</span>
+    </label>
+    <button class="submit-btn" id="consentBtn" ${state.consented ? "":"disabled"}>متابعة</button>
+  `;
+}
+
+function renderExperienceStep(){
+  return `
+    <h1 class="step-title">كيف تصف خبرتك السابقة في التدبر؟</h1>
+    <p class="step-sub">اختر ما يصفك أكثر</p>
     <div class="option-list">
-      ${[1,2,3].map(l => `
-        <button class="opt-card ${LEVELS[l].cls}" data-level="${l}">
+      ${EXPERIENCE.map(e => `
+        <button class="opt-card exp" data-exp="${e.key}">
           <span class="opt-text">
-            <span class="opt-title">${LEVELS[l].label}</span>
-            <span class="opt-sub">${LEVELS[l].sub}</span>
+            <span class="opt-title">${e.label}</span>
           </span>
           <span class="opt-chevron">‹</span>
         </button>`).join("")}
@@ -444,8 +499,7 @@ function renderLevelStep(){
 function renderAyahStep(){
   return `
     <button class="back-btn" id="backBtn">‹ رجوع</button>
-    <h1 class="step-title">اختر الآية التي قرأتها</h1>
-    <p class="step-sub">${LEVELS[state.level].label}</p>
+    <h1 class="step-title">اختر الآية التي ترغب في التدبر فيها</h1>
     <div class="option-list">
       ${Object.entries(CONTENT).map(([key,c]) => `
         <button class="opt-card ayah" data-ayah="${key}">
@@ -463,7 +517,8 @@ function renderReadStep(){
   const c = CONTENT[state.ayah];
   const lvl = LEVELS[state.level];
   const points = c.levels[state.level].points;
-  const captions = ["", "ضعيف", "مقبول", "جيد", "جيد جدًا", "ممتاز"];
+  const captions = ["", "لا أوافق بشدة", "لا أوافق", "محايد", "أوافق", "أوافق بشدة"];
+  const allRated = RATING_DIMENSIONS.every(d => state.ratings[d.key] > 0);
   return `
     <button class="back-btn" id="backBtn">‹ رجوع</button>
     <div class="badge-row"><span class="badge ${lvl.cls}">${lvl.label}</span></div>
@@ -473,19 +528,24 @@ function renderReadStep(){
       ${points.map(([t,b]) => `<div class="point">◆ <span><b>${t}:</b> ${b}</span></div>`).join("")}
     </div>
     <hr class="divider">
-    <div class="rate-label">كيف كان مستوى الفوائد؟</div>
-    <div class="rate-sub">قيّم من ١ (ضعيف) إلى ٥ (ممتاز)</div>
-    <div class="rate-row">
-      <span class="rate-end weak">ضعيف ١</span>
-      <div class="crescents">
-        ${[1,2,3,4,5].map(n => `<button class="crescent-btn ${n===state.rating ? "selected":""}" data-rate="${n}">${crescentSvg(n<=state.rating)}</button>`).join("")}
+    <div class="rate-label">ما رأيك في التدبر؟</div>
+    <div class="rate-sub">قيّم العبارات التالية من ١ (لا أوافق بشدة) إلى ٥ (أوافق بشدة)</div>
+    ${RATING_DIMENSIONS.map(d => `
+      <div class="qgroup">
+        <div class="q-label">${d.label}</div>
+        <div class="rate-row">
+          <span class="rate-end weak">١</span>
+          <div class="crescents">
+            ${[1,2,3,4,5].map(n => `<button class="crescent-btn ${n===state.ratings[d.key] ? "selected":""}" data-rate-dim="${d.key}" data-rate="${n}">${crescentSvg(n<=state.ratings[d.key])}</button>`).join("")}
+          </div>
+          <span class="rate-end strong">٥</span>
+        </div>
+        <div class="rate-caption">${state.ratings[d.key] ? captions[state.ratings[d.key]] : ""}</div>
       </div>
-      <span class="rate-end strong">٥ ممتاز</span>
-    </div>
-    <div class="rate-caption">${state.rating ? captions[state.rating] : ""}</div>
-    <label class="note-label" for="noteArea">شارك ملاحظة أو خاطرة (اختياري)</label>
+    `).join("")}
+    <label class="note-label" for="noteArea">هل لديك ملاحظة أو اقتراح؟ (اختياري)</label>
     <textarea id="noteArea" placeholder="اكتب هنا ما لمس قلبك من هذا التدبر...">${state.note}</textarea>
-    <button class="submit-btn" id="submitBtn" ${state.rating===0 || state.submitting ? "disabled":""}>
+    <button class="submit-btn" id="submitBtn" ${!allRated || state.submitting ? "disabled":""}>
       ${state.submitting ? "جارٍ الإرسال..." : "إرسال التقييم"}
     </button>
     ${state.error ? `<div class="err-text">${state.error}</div>` : ""}
@@ -495,28 +555,41 @@ function renderReadStep(){
 function renderThanksStep(){
   return `
     <div class="thanks">
-      <div class="moon">🌙</div>
-      <h1>جزاك الله خيرًا</h1>
-      <p>تم تسجيل تقييمك وملاحظتك بنجاح.<br>نفعنا الله وإياك بما تدبرناه من كتابه.</p>
+      <div class="moon">🤍</div>
+      <h1>جزاكم الله خيرًا</h1>
+      <p>شكرًا لمساهمتكم في تطوير مشروع بصائر.<br>نسأل الله أن ينفع به ويجعله في ميزان حسناتكم.</p>
       <button class="again-btn" id="againBtn">تدبّر آية أخرى</button>
     </div>
   `;
 }
 
 // ---------------- HANDLERS ----------------
+function randomLevel(){ return [1,2,3][Math.floor(Math.random()*3)]; }
+
 function attachHandlers(){
-  document.querySelectorAll("[data-level]").forEach(btn=>{
-    btn.addEventListener("click", ()=> setState({ level: Number(btn.dataset.level), step:"ayah" }));
+  const consentCheck = document.getElementById("consentCheck");
+  if (consentCheck) consentCheck.addEventListener("change", (e)=> setState({ consented: e.target.checked }));
+  const consentBtn = document.getElementById("consentBtn");
+  if (consentBtn) consentBtn.addEventListener("click", ()=> { if (state.consented) setState({ step:"experience" }); });
+
+  document.querySelectorAll("[data-exp]").forEach(btn=>{
+    btn.addEventListener("click", ()=> setState({ experience: btn.dataset.exp, step:"ayah" }));
   });
   document.querySelectorAll("[data-ayah]").forEach(btn=>{
-    btn.addEventListener("click", ()=> setState({ ayah: btn.dataset.ayah, step:"read", rating:0, note:"", error:"" }));
+    btn.addEventListener("click", ()=> setState({
+      ayah: btn.dataset.ayah, level: randomLevel(), step:"read",
+      ratings: emptyRatings(), note:"", error:""
+    }));
   });
   document.querySelectorAll("[data-rate]").forEach(btn=>{
-    btn.addEventListener("click", ()=> setState({ rating:Number(btn.dataset.rate) }));
+    btn.addEventListener("click", ()=> {
+      const dim = btn.dataset.rateDim;
+      setState({ ratings: { ...state.ratings, [dim]: Number(btn.dataset.rate) } });
+    });
   });
   const back = document.getElementById("backBtn");
   if (back) back.addEventListener("click", ()=>{
-    if (state.step==="ayah") setState({ step:"level" });
+    if (state.step==="ayah") setState({ step:"experience" });
     else if (state.step==="read") setState({ step:"ayah" });
   });
   const noteArea = document.getElementById("noteArea");
@@ -529,7 +602,10 @@ function attachHandlers(){
     else setState({ submitting:false, error:"تعذّر إرسال إجابتك، تحقق من الاتصال وحاول مرة أخرى." });
   });
   const again = document.getElementById("againBtn");
-  if (again) again.addEventListener("click", ()=> setState({ step:"level", level:null, ayah:null, rating:0, note:"", error:"" }));
+  if (again) again.addEventListener("click", ()=> setState({
+    step:"experience", experience:null, level:null, ayah:null,
+    ratings: emptyRatings(), note:"", error:""
+  }));
 }
 
 // ---------------- ADMIN ----------------
@@ -593,7 +669,8 @@ async function openDashboard(){
       return;
     }
 
-    const avg = (arr)=> (arr.reduce((s,x)=>s+x.rating,0)/arr.length).toFixed(1);
+    const overall = (d)=> (d.clarity + d.relevance + d.reflection + d.usefulness) / 4;
+    const avg = (arr)=> (arr.reduce((s,x)=>s+overall(x),0)/arr.length).toFixed(1);
     const overallAvg = avg(data);
 
     const byAyah = {};
@@ -627,11 +704,23 @@ async function openDashboard(){
           </div>`).join("")}
       </div>
       <div class="breakdown">
+        <h3>حسب خبرة المشارك</h3>
+        ${EXPERIENCE.map(e=>{
+          const arr = data.filter(d=>d.experience===e.key);
+          return `
+          <div class="bd-row">
+            <span class="bd-label">${e.label}</span>
+            <div class="bd-bar"><div class="fill" style="width:${arr.length? (avg(arr)/5*100):0}%"></div></div>
+            <span class="bd-val">${arr.length ? avg(arr)+' ★' : '—'} (${arr.length})</span>
+          </div>`;
+        }).join("")}
+      </div>
+      <div class="breakdown">
         <h3>أحدث الملاحظات (${notes.length})</h3>
         <div class="entries">
           ${notes.length ? notes.slice(0,25).map(n=>`
             <div class="entry">
-              <div class="entry-top"><span>${CONTENT[n.ayah].title} · ${LEVELS[n.level].label}</span><span>${'★'.repeat(n.rating)}</span></div>
+              <div class="entry-top"><span>${CONTENT[n.ayah].title} · ${LEVELS[n.level].label}</span><span>${'★'.repeat(Math.round(overall(n)))}</span></div>
               <div class="entry-note">${escapeHtml(n.note)}</div>
               <div class="entry-date">${new Date(n.ts).toLocaleString('ar-EG')}</div>
             </div>`).join("") : '<div class="empty-note">لا توجد ملاحظات نصية بعد.</div>'}
@@ -654,3 +743,5 @@ render();
 </script>
 </body>
 </html>
+index_updated_google_sheets.html
+HTML
