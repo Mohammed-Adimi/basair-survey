@@ -42,9 +42,9 @@
     padding:28px 14px 60px;
   }
   .display{font-family:'Amiri', 'Tajawal', serif;}
-
+ 
   .wrap{ width:100%; max-width:560px; }
-
+ 
   .brandrow{
     display:flex; align-items:baseline; justify-content:center; gap:10px;
     margin-bottom:22px;
@@ -54,7 +54,7 @@
     letter-spacing:1px;
   }
   .brandrow .tagline{ font-size:13px; color:var(--muted); }
-
+ 
   .beads{
     display:flex; align-items:center; justify-content:center; gap:0; margin-bottom:26px;
     user-select:none;
@@ -68,7 +68,7 @@
   .bead.current{ background:var(--gold); border-color:var(--gold); transform:scale(1.35); box-shadow:0 0 0 5px rgba(174,124,46,0.18); }
   .thread{ width:34px; height:1.5px; background:var(--paper-3); }
   .thread.done{ background:var(--gold-light); }
-
+ 
   .card{
     position:relative;
     background:#fffdf8;
@@ -81,7 +81,7 @@
   .corner{ position:absolute; width:46px; height:46px; opacity:.55; pointer-events:none; }
   .corner-tr{ top:8px; left:8px; transform:scaleX(-1); }
   .corner-bl{ bottom:8px; right:8px; transform:rotate(180deg) scaleX(-1); }
-
+ 
   h1.step-title{
     font-family:'Amiri', serif;
     font-size:24px; font-weight:700; margin:0 0 4px; color:var(--ink);
@@ -90,14 +90,14 @@
   p.step-sub{
     text-align:center; color:var(--muted); font-size:14px; margin:0 0 24px;
   }
-
+ 
   .back-btn{
     display:inline-flex; align-items:center; gap:6px;
     background:none; border:none; color:var(--muted); font-family:inherit;
     font-size:13px; cursor:pointer; padding:4px 2px; margin-bottom:10px;
   }
   .back-btn:hover{ color:var(--ink); }
-
+ 
   .option-list{ display:flex; flex-direction:column; gap:12px; }
   .opt-card{
     text-align:right; cursor:pointer; border:1.5px solid var(--paper-3);
@@ -111,7 +111,7 @@
   .opt-card .opt-text .opt-title{ font-weight:700; font-size:17px; margin-bottom:3px; }
   .opt-card .opt-text .opt-sub{ font-size:12.5px; color:var(--muted); }
   .opt-card .opt-chevron{ font-size:18px; opacity:.45; flex-shrink:0; }
-
+ 
   .opt-card.lvl-1{ border-color:#c9dfd2; }
   .opt-card.lvl-1 .opt-title{ color:var(--teal); }
   .opt-card.lvl-2{ border-color:#c7d8e2; }
@@ -120,7 +120,7 @@
   .opt-card.lvl-3 .opt-title{ color:var(--plum); }
   .opt-card.ayah .opt-title{ color:var(--gold-deep); }
   .opt-card.exp .opt-title{ color:var(--gold-deep); }
-
+ 
   .consent-box{
     background:var(--paper); border:1px solid var(--paper-3); border-radius:14px;
     padding:16px 18px; font-size:13.5px; line-height:2; color:var(--ink-soft); margin-bottom:18px;
@@ -130,12 +130,12 @@
     font-size:13.5px; color:var(--ink); cursor:pointer;
   }
   .consent-check-row input{ margin-top:3px; width:17px; height:17px; accent-color:var(--gold-deep); flex-shrink:0; }
-
+ 
   .qgroup{ margin-bottom:24px; }
   .qgroup:last-child{ margin-bottom:0; }
   .qgroup .q-label{ text-align:center; font-weight:700; font-size:14px; margin-bottom:10px; }
   .qgroup .rate-row{ margin-bottom:4px; }
-
+ 
   .badge{
     display:inline-block; font-size:11px; padding:3px 10px; border-radius:999px;
     font-weight:700; margin-bottom:10px;
@@ -143,11 +143,47 @@
   .badge.lvl-1{ background:var(--teal-bg); color:var(--teal); }
   .badge.lvl-2{ background:var(--blue-bg); color:var(--blue); }
   .badge.lvl-3{ background:var(--plum-bg); color:var(--plum); }
-
+ 
   .read-ref{ text-align:center; color:var(--gold-deep); font-weight:700; font-size:14px; margin-bottom:2px; }
   .read-title{ text-align:center; font-family:'Amiri',serif; font-size:26px; font-weight:700; margin:2px 0 14px; }
   .badge-row{ display:flex; justify-content:center; margin-bottom:16px; }
-
+ 
+  .ayah-block{
+    position:relative;
+    background: linear-gradient(180deg, var(--paper-2), var(--paper));
+    border:1px solid var(--gold-light);
+    border-radius:14px;
+    padding:18px 20px 16px;
+    margin-bottom:22px;
+  }
+  .ayah-block-label{
+    text-align:center; font-size:11.5px; font-weight:800; letter-spacing:.5px;
+    color:var(--gold-deep); text-transform:none; margin-bottom:10px;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+  }
+  .ayah-block-label::before, .ayah-block-label::after{
+    content:""; width:22px; height:1px; background:var(--gold);
+    opacity:.55;
+  }
+  .ayah-block-text{
+    font-family:'Amiri', serif; font-size:19px; line-height:2.35;
+    text-align:center; color:var(--ink); direction:rtl;
+    transition: max-height .25s ease;
+  }
+  .ayah-block-text.clamped{
+    max-height:118px; overflow:hidden; position:relative;
+    -webkit-mask-image: linear-gradient(180deg, #000 60%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 60%, transparent 100%);
+  }
+  .ayah-toggle{
+    display:block; margin:10px auto 0; background:none; border:none;
+    color:var(--gold-deep); font-family:inherit; font-size:12.5px; font-weight:700;
+    cursor:pointer; padding:5px 10px; border-radius:8px;
+  }
+  .ayah-toggle:hover{ background:var(--gold-light); }
+  .ayah-toggle .chev{ display:inline-block; margin-inline-start:4px; transition: transform .2s ease; }
+  .ayah-toggle.open .chev{ transform:rotate(180deg); }
+ 
   .points{ display:flex; flex-direction:column; gap:12px; margin-bottom:26px; }
   .point{
     display:flex; gap:10px; align-items:flex-start;
@@ -156,9 +192,9 @@
     font-size:14.5px; line-height:1.9;
   }
   .point b{ color:var(--gold-deep); }
-
+ 
   .divider{ border:none; border-top:1px dashed var(--paper-3); margin:22px 0; }
-
+ 
   .rate-label{ text-align:center; font-weight:700; font-size:15px; margin-bottom:4px; }
   .rate-sub{ text-align:center; color:var(--muted); font-size:12.5px; margin-bottom:14px; }
   .rate-row{ display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:14px; direction:ltr; }
@@ -182,7 +218,7 @@
     text-align:center; font-size:15px; color:var(--gold-deep); font-weight:800;
     min-height:20px; margin:0 0 18px; transition:opacity .15s ease;
   }
-
+ 
   textarea{
     width:100%; min-height:88px; resize:vertical;
     border:1.5px solid var(--paper-3); border-radius:12px; padding:12px 14px;
@@ -191,7 +227,7 @@
   }
   textarea:focus{ outline:none; border-color:var(--gold); }
   label.note-label{ display:block; font-size:13px; font-weight:700; margin:18px 0 8px; color:var(--ink-soft); }
-
+ 
   .submit-btn{
     width:100%; margin-top:22px; padding:14px; border:none; border-radius:12px;
     background:var(--gold-deep); color:#fff; font-family:inherit; font-weight:700; font-size:15.5px;
@@ -200,7 +236,7 @@
   .submit-btn:hover{ background:#754e1a; }
   .submit-btn:disabled{ opacity:.45; cursor:not-allowed; }
   .err-text{ text-align:center; color:var(--danger); font-size:13px; margin-top:10px; }
-
+ 
   .thanks{ text-align:center; padding:20px 0 4px; }
   .thanks .moon{ font-size:44px; margin-bottom:10px; }
   .thanks h1{ font-family:'Amiri',serif; font-size:24px; margin:0 0 8px; }
@@ -211,14 +247,14 @@
     cursor:pointer; font-size:14px;
   }
   .again-btn:hover{ background:var(--gold-light); }
-
+ 
   .admin-link{
     display:block; text-align:center; margin-top:22px; font-size:11.5px;
     color:var(--muted); text-decoration:none; opacity:.6; cursor:pointer; background:none; border:none;
     width:100%; font-family:inherit;
   }
   .admin-link:hover{ opacity:1; }
-
+ 
   .overlay{
     position:fixed; inset:0; background:rgba(27,46,40,0.55);
     display:flex; align-items:center; justify-content:center; padding:16px; z-index:50;
@@ -244,12 +280,12 @@
     color:var(--muted); cursor:pointer;
   }
   .modal{ position:relative; }
-
+ 
   .stat-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:18px; }
   .stat-box{ background:var(--paper); border-radius:12px; padding:12px; text-align:center; }
   .stat-box .num{ font-size:22px; font-weight:800; color:var(--gold-deep); }
   .stat-box .lab{ font-size:11.5px; color:var(--muted); margin-top:2px; }
-
+ 
   .breakdown{ margin-bottom:16px; }
   .breakdown h3{ font-size:13px; margin:0 0 8px; color:var(--ink-soft); }
   .bd-row{ display:flex; align-items:center; gap:8px; font-size:12.5px; margin-bottom:6px; }
@@ -257,7 +293,7 @@
   .bd-bar{ flex:1; height:8px; background:var(--paper-2); border-radius:6px; overflow:hidden; }
   .bd-bar .fill{ height:100%; background:var(--gold); border-radius:6px; }
   .bd-row .bd-val{ width:40px; text-align:left; direction:ltr; color:var(--muted); flex-shrink:0; }
-
+ 
   .entries{ display:flex; flex-direction:column; gap:10px; }
   .entry{ background:var(--paper); border-radius:10px; padding:10px 12px; font-size:12.5px; }
   .entry .entry-top{ display:flex; justify-content:space-between; margin-bottom:4px; color:var(--gold-deep); font-weight:700; }
@@ -285,7 +321,7 @@
   </div>
   <button class="admin-link" id="adminLink">لوحة المتابعة (للمشرف)</button>
 </div>
-
+ 
 <script>
 // ---------------- CONTENT ----------------
 const CONTENT = {
@@ -352,45 +388,64 @@ const CONTENT = {
     }
   }
 };
-
+ 
+// Full Quranic text shown in the "الآية الكريمة" block on the read step.
+// collapsible:true → shown collapsed by default with a "show full ayah" toggle.
+const AYAH_TEXT = {
+  kursi: {
+    collapsible: true,
+    preview: "اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۚ ...",
+    full: "اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ"
+  },
+  azm: {
+    collapsible: false,
+    full: "كُلُّ نَفْسٍ ذَائِقَةُ الْمَوْتِ ۗ وَإِنَّمَا تُوَفَّوْنَ أُجُورَكُمْ يَوْمَ الْقِيَامَةِ ۖ فَمَن زُحْزِحَ عَنِ النَّارِ وَأُدْخِلَ الْجَنَّةَ فَقَدْ فَازَ ۗ وَمَا الْحَيَاةُ الدُّنْيَا إِلَّا مَتَاعُ الْغُرُورِ"
+  },
+  ikhlas: {
+    collapsible: false,
+    full: "قُلْ هُوَ اللَّهُ أَحَدٌ ﴿١﴾ اللَّهُ الصَّمَدُ ﴿٢﴾ لَمْ يَلِدْ وَلَمْ يُولَدْ ﴿٣﴾ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ ﴿٤﴾"
+  }
+};
+ 
 const LEVELS = {
   1: { label:"المستوى التمهيدي", sub:"المعنى المباشر والدروس الأساسية", cls:"lvl-1" },
   2: { label:"المستوى المتوسط", sub:"تفصيل أعمق في الدلالات", cls:"lvl-2" },
   3: { label:"المستوى العميق", sub:"لطائف وأسرار بلاغية ومعرفية", cls:"lvl-3" },
 };
-
+ 
 const EXPERIENCE = [
   { key:"beginner", label:"مبتدئ" },
   { key:"some", label:"لدي بعض الخبرة" },
   { key:"skilled", label:"متمرس" },
   { key:"expert", label:"متمرس جدًا" },
 ];
-
+ 
 const RATING_DIMENSIONS = [
   { key:"clarity", label:"وضوح التدبر" },
   { key:"relevance", label:"ارتباطه بالآية" },
   { key:"reflection", label:"مساعدته على التأمل" },
   { key:"usefulness", label:"فائدته" },
 ];
-
+ 
 const ADMIN_CODE = "2255";
-
+ 
 // ---------------- STATE ----------------
 function emptyRatings(){ return { clarity:0, relevance:0, reflection:0, usefulness:0 }; }
 let state = {
   step:"consent", consented:false,
   experience:null, level:null, ayah:null,
-  ratings: emptyRatings(), note:"", submitting:false, error:""
+  ratings: emptyRatings(), note:"", submitting:false, error:"",
+  ayahExpanded:false
 };
-
+ 
 function setState(patch){ state = { ...state, ...patch }; render(); }
-
+ 
 // ---------------- ICONS ----------------
 function crescentSvg(filled){
   return `<svg viewBox="0 0 24 24"><path d="M14.5 3.5C9.5 3.5 5.5 7.5 5.5 12.5S9.5 21.5 14.5 21.5c2 0 3.8-.66 5.3-1.77-1.2.5-2.5.77-3.9.77-5 0-9-3.9-9-8.5s4-8.5 9-8.5c1.4 0 2.7.27 3.9.77C18.3 4.16 16.5 3.5 14.5 3.5z"
     fill="${filled ? 'var(--gold)' : 'none'}" stroke="var(--gold)" stroke-width="1.3" stroke-linejoin="round"/></svg>`;
 }
-
+ 
 // ---------------- BEADS ----------------
 function renderBeads(){
   const order = ["experience","ayah","read"];
@@ -406,11 +461,10 @@ function renderBeads(){
   }
   beadsEl.innerHTML = html;
 }
-
+ 
 // ---------------- GOOGLE SHEETS STORAGE ----------------
-const GOOGLE_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbw8Pd_poGh780UTbvt0q83RgZlm04Gv1mnWEKhSqq9WrP4Jd08BMYSI5pqTjO6NF4BRGQ/exec";
-
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8Pd_poGh780UTbvt0q83RgZlm04Gv1mnWEKhSqq9WrP4Jd08BMYSI5pqTjO6NF4BRGQ/exec";
+ 
 async function saveResponse(){
   const payload = {
     experience: state.experience,
@@ -420,11 +474,10 @@ async function saveResponse(){
     relevance: state.ratings.relevance,
     reflection: state.ratings.reflection,
     usefulness: state.ratings.usefulness,
-    note: state.note.trim(),
-    ts: Date.now()
+    note: state.note.trim()
   };
-
-  try{
+ 
+  try {
     await fetch(GOOGLE_SCRIPT_URL, {
       method: "POST",
       mode: "no-cors",
@@ -433,17 +486,14 @@ async function saveResponse(){
       },
       body: JSON.stringify(payload)
     });
-
-    // With no-cors the browser cannot read the response,
-    // but a successful fetch means the request was sent.
+ 
     return true;
-
-  }catch(e){
-    console.error("Google Sheets save failed", e);
+  } catch (error) {
+    console.error("Google Sheets save failed:", error);
     return false;
   }
 }
-
+ 
 // Google Sheets is the central database.
 // The old window.storage dashboard cannot be used anymore.
 // Keep this function as a placeholder so the existing dashboard
@@ -451,7 +501,7 @@ async function saveResponse(){
 async function loadAllResponses(){
   return [];
 }
-
+ 
 // ---------------- RENDER STEPS ----------------
 function render(){
   renderBeads();
@@ -463,7 +513,7 @@ function render(){
   else if (state.step === "thanks") el.innerHTML = renderThanksStep();
   attachHandlers();
 }
-
+ 
 function renderConsentStep(){
   return `
     <h1 class="step-title">المشاركة في الدراسة</h1>
@@ -479,7 +529,7 @@ function renderConsentStep(){
     <button class="submit-btn" id="consentBtn" ${state.consented ? "":"disabled"}>متابعة</button>
   `;
 }
-
+ 
 function renderExperienceStep(){
   return `
     <h1 class="step-title">كيف تصف خبرتك السابقة في التدبر؟</h1>
@@ -495,7 +545,7 @@ function renderExperienceStep(){
     </div>
   `;
 }
-
+ 
 function renderAyahStep(){
   return `
     <button class="back-btn" id="backBtn">‹ رجوع</button>
@@ -512,7 +562,28 @@ function renderAyahStep(){
     </div>
   `;
 }
-
+ 
+function renderAyahBlock(){
+  const at = AYAH_TEXT[state.ayah];
+  if (!at) return "";
+  if (!at.collapsible){
+    return `
+    <div class="ayah-block">
+      <div class="ayah-block-label">الآية الكريمة</div>
+      <div class="ayah-block-text">${at.full}</div>
+    </div>`;
+  }
+  const expanded = state.ayahExpanded;
+  return `
+    <div class="ayah-block">
+      <div class="ayah-block-label">الآية الكريمة</div>
+      <div class="ayah-block-text ${expanded ? "" : "clamped"}">${expanded ? at.full : at.preview}</div>
+      <button class="ayah-toggle ${expanded ? "open":""}" id="ayahToggleBtn">
+        ${expanded ? "طي الآية" : "إظهار الآية كاملة"} <span class="chev">⌄</span>
+      </button>
+    </div>`;
+}
+ 
 function renderReadStep(){
   const c = CONTENT[state.ayah];
   const lvl = LEVELS[state.level];
@@ -524,6 +595,7 @@ function renderReadStep(){
     <div class="badge-row"><span class="badge ${lvl.cls}">${lvl.label}</span></div>
     <div class="read-ref">${c.ref}</div>
     <div class="read-title">${c.title}</div>
+    ${renderAyahBlock()}
     <div class="points">
       ${points.map(([t,b]) => `<div class="point">◆ <span><b>${t}:</b> ${b}</span></div>`).join("")}
     </div>
@@ -551,7 +623,7 @@ function renderReadStep(){
     ${state.error ? `<div class="err-text">${state.error}</div>` : ""}
   `;
 }
-
+ 
 function renderThanksStep(){
   return `
     <div class="thanks">
@@ -562,25 +634,27 @@ function renderThanksStep(){
     </div>
   `;
 }
-
+ 
 // ---------------- HANDLERS ----------------
 function randomLevel(){ return [1,2,3][Math.floor(Math.random()*3)]; }
-
+ 
 function attachHandlers(){
   const consentCheck = document.getElementById("consentCheck");
   if (consentCheck) consentCheck.addEventListener("change", (e)=> setState({ consented: e.target.checked }));
   const consentBtn = document.getElementById("consentBtn");
   if (consentBtn) consentBtn.addEventListener("click", ()=> { if (state.consented) setState({ step:"experience" }); });
-
+ 
   document.querySelectorAll("[data-exp]").forEach(btn=>{
     btn.addEventListener("click", ()=> setState({ experience: btn.dataset.exp, step:"ayah" }));
   });
   document.querySelectorAll("[data-ayah]").forEach(btn=>{
     btn.addEventListener("click", ()=> setState({
       ayah: btn.dataset.ayah, level: randomLevel(), step:"read",
-      ratings: emptyRatings(), note:"", error:""
+      ratings: emptyRatings(), note:"", error:"", ayahExpanded:false
     }));
   });
+  const ayahToggleBtn = document.getElementById("ayahToggleBtn");
+  if (ayahToggleBtn) ayahToggleBtn.addEventListener("click", ()=> setState({ ayahExpanded: !state.ayahExpanded }));
   document.querySelectorAll("[data-rate]").forEach(btn=>{
     btn.addEventListener("click", ()=> {
       const dim = btn.dataset.rateDim;
@@ -604,13 +678,13 @@ function attachHandlers(){
   const again = document.getElementById("againBtn");
   if (again) again.addEventListener("click", ()=> setState({
     step:"experience", experience:null, level:null, ayah:null,
-    ratings: emptyRatings(), note:"", error:""
+    ratings: emptyRatings(), note:"", error:"", ayahExpanded:false
   }));
 }
-
+ 
 // ---------------- ADMIN ----------------
 document.getElementById("adminLink").addEventListener("click", openAdminGate);
-
+ 
 function openAdminGate(){
   const overlay = document.createElement("div");
   overlay.className = "overlay";
@@ -638,7 +712,7 @@ function openAdminGate(){
   input.addEventListener("keydown", (e)=>{ if (e.key==="Enter") tryEnter(); });
   input.focus();
 }
-
+ 
 async function openDashboard(){
   const overlay = document.createElement("div");
   overlay.className = "overlay";
@@ -654,32 +728,32 @@ async function openDashboard(){
   document.getElementById("closeDash").addEventListener("click", ()=> overlay.remove());
   overlay.addEventListener("click", (e)=>{ if (e.target===overlay) overlay.remove(); });
   await fillDashboard();
-
+ 
   async function fillDashboard(){
     const body = document.getElementById("dashBody");
     body.innerHTML = `<div class="loading">جارٍ تحميل النتائج...</div>`;
     let data = [];
     try{ data = await loadAllResponses(); }
     catch(e){ body.innerHTML = `<div class="err-text">تعذّر تحميل النتائج.</div>`; return; }
-
+ 
     if (data.length === 0){
       body.innerHTML = `<div class="empty-note">لا توجد إجابات بعد.</div>
         <button class="refresh-btn" id="refreshDash">تحديث</button>`;
       document.getElementById("refreshDash").addEventListener("click", fillDashboard);
       return;
     }
-
+ 
     const overall = (d)=> (d.clarity + d.relevance + d.reflection + d.usefulness) / 4;
     const avg = (arr)=> (arr.reduce((s,x)=>s+overall(x),0)/arr.length).toFixed(1);
     const overallAvg = avg(data);
-
+ 
     const byAyah = {};
     Object.keys(CONTENT).forEach(k => byAyah[k] = data.filter(d=>d.ayah===k));
     const byLevel = {1:[],2:[],3:[]};
     data.forEach(d => { if(byLevel[d.level]) byLevel[d.level].push(d); });
-
+ 
     const notes = data.filter(d => d.note && d.note.length>0);
-
+ 
     body.innerHTML = `
       <div class="stat-grid">
         <div class="stat-box"><div class="num">${data.length}</div><div class="lab">إجمالي الإجابات</div></div>
@@ -731,13 +805,13 @@ async function openDashboard(){
     document.getElementById("refreshDash").addEventListener("click", fillDashboard);
   }
 }
-
+ 
 function escapeHtml(str){
   const div = document.createElement("div");
   div.textContent = str;
   return div.innerHTML;
 }
-
+ 
 // ---------------- INIT ----------------
 render();
 </script>
